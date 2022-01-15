@@ -54,8 +54,8 @@ npm start
 
 Input author id and click submit.
 
-![image-20220115001556477](C:\Users\xinyu\AppData\Roaming\Typora\typora-user-images\image-20220115001556477.png)
+![Task1](task1.png)
 
 The output for sample author id 2146473740.
 
-![image-20220115001839763](C:\Users\xinyu\AppData\Roaming\Typora\typora-user-images\image-20220115001839763.png)
+![output](output.png)

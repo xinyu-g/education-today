@@ -54,8 +54,8 @@ npm start
 
 Input author id and click submit.
 
-![Task1](task1.png)
+![Task1](task1.PNG)
 
 The output for sample author id 2146473740.
 
-![output](output.png)
+![output](output.PNG)

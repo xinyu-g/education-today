@@ -6,11 +6,18 @@ import mysql_utils as ms
 import queries as q
 import logging
 import csv
+import argparse
 
     
 
 def main():
-    # ms.create_schema(q.CREATE_DB)
+
+    parser = argparse.ArgumentParser()
+    # parser.add_argument('--db', default=c.DB)
+    # create complete database or selected database
+    parser.add_argument('--reduced', default=True, type=lambda x: (str(x).lower() == 'true'))
+    args = parser.parse_args()
+
     log = logging.getLogger('edtoday')
     logfmt = '%(asctime)s %(name)-12s: %(levelname)-8s %(message)s'
     logging.basicConfig(
@@ -24,7 +31,10 @@ def main():
 
     log.info('creating database and tables ...')
 
-    ms.create_schema(q.CREATE_TABLES)
+    if args.reduced:
+        ms.create_schema(q.CREATE_TABLES_REDUCED)
+    else:
+        ms.create_schema(q.CREATE_TABLES)
 
     # files = glob(c.DATA)
 
@@ -36,6 +46,8 @@ def main():
         for data in pd.read_csv(file_path, delimiter='\t', names=c.SCHEMA[file]['cols'], chunksize=c.SCHEMA[file]['size'], quoting=csv.QUOTE_NONE):
             log.info('insert data entries into table {} {} ...'.format(file, idx))
             idx += 1
+            cols = c.REDUCED_SCHEMA[file]['cols'] if args.reduced else c.SCHEMA[file]['cols']
+            data = data[cols]
             ms.insert(c.DB, file, data)
 
 

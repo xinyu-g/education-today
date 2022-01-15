@@ -1,12 +1,12 @@
-
+import consts as c
 
 CREATE_TABLES = (
     """
-    CREATE DATABASE IF NOT EXISTS eductoday
-    """,
+    CREATE DATABASE IF NOT EXISTS {}
+    """.format(c.DB),
     """
-    USE eductoday
-    """,
+    USE {}
+    """.format(c.DB),
     """
     CREATE TABLE IF NOT EXISTS Affiliations (
         AffiliationId BIGINT,
@@ -79,6 +79,70 @@ CREATE_TABLES = (
         AuthorSequenceNumber INT UNSIGNED,
         OriginalAuthor TEXT,
         OriginalAffiliation TEXT
+    )
+    """,
+        # FOREIGN KEY (PaperId) REFERENCES Papers(PaperId)
+        #     ON DELETE CASCADE,
+        # FOREIGN KEY (AuthorId) REFERENCES Authors(AuthorId)
+        #     ON DELETE CASCADE,
+        # FOREIGN KEY (AffiliationId) REFERENCES Affiliations(AffiliationId)
+        #     ON DELETE CASCADE
+    """
+    CREATE TABLE IF NOT EXISTS PaperReferences (
+        PaperId BIGINT,
+        PaperReferenceId BIGINT,
+        PRIMARY KEY (PaperId, PaperReferenceId)
+    )
+    """
+    # FOREIGN KEY (PaperId) REFERENCES Papers(PaperId)
+    #     ON DELETE CASCADE,
+    # FOREIGN KEY (PaperReferenceId) REFERENCES Papers(PaperId)
+    #     ON DELETE CASCADE
+)
+
+
+CREATE_TABLES_REDUCED = (
+    """
+    CREATE DATABASE IF NOT EXISTS {}
+    """.format(c.DB),
+    """
+    USE {}
+    """.format(c.DB),
+    """
+    CREATE TABLE IF NOT EXISTS Affiliations (
+        AffiliationId BIGINT,
+        `Rank` INT UNSIGNED,
+        NormalizedName TEXT,
+        DisplayName TEXT,
+        PaperCount BIGINT,
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS Authors (
+        AuthorId BIGINT,
+        `Rank` INT UNSIGNED,
+        NormalizedName TEXT,
+        DisplayName TEXT,
+        LastKnownAffiliationId BIGINT,
+        PaperCount BIGINT,
+        PRIMARY KEY (AuthorId)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS Papers (
+        PaperId BIGINT,
+        `Rank` INT UNSIGNED,
+        ReferenceCount BIGINT,
+        CitationCount BIGINT,
+        EstimatedCitation BIGINT,
+        PRIMARY KEY (PaperId)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS PaperAuthorAffiliations (
+        PaperId BIGINT,
+        AuthorId BIGINT,
+        AffiliationId BIGINT,
     )
     """,
         # FOREIGN KEY (PaperId) REFERENCES Papers(PaperId)

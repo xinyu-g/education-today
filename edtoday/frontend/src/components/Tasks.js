@@ -6,9 +6,11 @@ export const Tasks = ({ tasks }) => {
       <List>
         {tasks.map(task => {
           return (
-            <List.Item key={movie.title}>
-              <Header>{movie.title}</Header>
-              <Rating rating={movie.rating} maxRating={5} disabled />
+            <List.Item key={task.paperId}>
+              <Header>{task.paperId}</Header>
+              <p>
+                  {task.numOfTimeReferenced}
+              </p>
             </List.Item>
           );
         })}

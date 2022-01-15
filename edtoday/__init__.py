@@ -1,6 +1,6 @@
 from flask import Flask 
-from flask.ext.mysql import MySQL
-from api import main
+from flaskext.mysql import MySQL
+
 
 
 db = MySQL()
@@ -14,7 +14,8 @@ def create_app():
     app.config['MYSQL_DATABASE_HOST'] = 'localhost'
     
     db.init_app(app)
-    
+
+    from .api import main
     app.register_blueprint(main)
 
     return app

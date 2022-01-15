@@ -4,18 +4,19 @@ from . import db
 # from flask_sqlalchemy import SQLAlchemy 
 
 
-
-
 # mysql = MySQL()
 # # MySQL configurations
 
 
 main = Blueprint('main', __name__)
 
-conn = db.connect()
 
-@app.route("/task1", methods=['GET','POST'])
+
+
+@main.route("/task1", methods=['GET','POST'])
 def task1():
+
+    conn = db.connect()
     cur = conn.cursor()
     sql = """SELECT pr.PaperReferenceId, COUNT(T.PaperId)
                 FROM (SELECT AuthorId, PaperId
@@ -23,21 +24,25 @@ def task1():
                 WHERE a.AuthorId = {}) as T NATURAL JOIN paperreferences as pr
                 GROUP BY pr.PaperReferenceId
                 ORDER BY COUNT(T.PaperId) DESC"""
-    author_id = 2146473740
-    cur.execute(sql.format(author_id))
+    # input = request.get_json()
+    # author_id = input['authorId']
+    author_id = request.get_json()
+    cur.execute(sql.format(int(author_id)))
     tasks = []
     for id, cnt in cur.fetchall():
         tasks.append({
-            'PaperId': id,
+            'paperId': id,
             'citedBy': author_id,
             'numOfTimeReferenced': cnt
         })
 
-    return jsonify(tasks)
+    cur.close()
+    return jsonify({'tasks': tasks})
 
 
-@app.route("/task2", methods=['GET','POST'])
+@main.route("/task2", methods=['GET','POST'])
 def task2():
+    conn = db.connect()
     cur = conn.cursor()
     return 'Done'
     
